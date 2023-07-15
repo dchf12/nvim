@@ -1,5 +1,4 @@
 require("base")
 require("options")
 require("plugins")
-require('keymaps') -- pluginsの後
-
+require('keymaps')  -- pluginsの後
