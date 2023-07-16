@@ -40,6 +40,17 @@ vim.o.completeopt   = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
-vim.o.tabstop       = 4
-vim.o.shiftwidth    = 4
+vim.o.tabstop       = 2
+vim.o.shiftwidth    = 2
+vim.o.softtabstop   = 4
 vim.o.expandtab     = true
+vim.wo.scrolloff    = 5
+vim.wo.foldlevel    = 3
+vim.wo.list         = true
+vim.o.listchars     = 'tab:» ,trail:~,eol:↲'
+vim.wo.foldmethod   = 'indent'
+vim.o.autoindent    = true
+vim.o.smartindent   = true
+vim.o.smarttab      = true
+vim.wo.wrap         = true
+vim.bo.textwidth    = 0

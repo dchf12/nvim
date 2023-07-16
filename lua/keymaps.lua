@@ -7,6 +7,31 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
+-- vim.keymap.set('n', '/', '/\v', { expr = true, silent = true })
+vim.keymap.set({ 'n', 'i' }, '<C-s>', '<ESC>:w<CR>', { noremap = true })
+vim.keymap.set({ 'n', 'i' }, '<C-s><C-s>', '<ESC>ZZ', { noremap = true })
+vim.keymap.set({ 'n', 'i' }, '<C-q>', '<ESC>:q!<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<ESC><ESC>', ':nohl<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<C-b><C-d>', ':bd<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<C-b><C-n>', ':bn<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<C-b><C-p>', ':bp<CR>', { noremap = true, silent = true })
+vim.keymap.set('i', 'jj', '<ESC>', { noremap = true, silent = true })
+vim.keymap.set('n', 'tt', '<cmd>belowright new<CR><cmd>terminal<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', 'x', '"_x', { noremap = true, silent = true })
+vim.keymap.set('x', 'x', '"_x', { noremap = true, silent = true })
+vim.api.nvim_create_autocmd('TermOpen', {
+	pattern = '*',
+	command = 'startinsert',
+})
+vim.api.nvim_create_autocmd('TermOpen',{
+	pattern = '*',
+	command = 'setlocal norelativenumber',
+})
+vim.api.nvim_create_autocmd('TermOpen', {
+	pattern = '*',
+	command = 'setlocal nonumber',
+})
+
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
