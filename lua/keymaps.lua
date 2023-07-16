@@ -23,7 +23,7 @@ vim.api.nvim_create_autocmd('TermOpen', {
 	pattern = '*',
 	command = 'startinsert',
 })
-vim.api.nvim_create_autocmd('TermOpen',{
+vim.api.nvim_create_autocmd('TermOpen', {
 	pattern = '*',
 	command = 'setlocal norelativenumber',
 })
@@ -32,6 +32,11 @@ vim.api.nvim_create_autocmd('TermOpen', {
 	command = 'setlocal nonumber',
 })
 
+-- copolot
+-- vim.g.copilot_no_tab_map = true
+vim.keymap.set('i', '<C-J>', 'copilot#Accept("<CR>")', { expr = true, silent = true })
+
+-- telescope
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
@@ -91,7 +96,14 @@ local on_attach = function(_, bufnr)
 	-- vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
 	-- 	vim.lsp.buf.format()
 	-- end, { desc = 'Format current buffer with LSP' })
+	vim.api.nvim_create_autocmd('BufWritePre', {
+		pattern = '*.go',
+		callback = function()
+			vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports' } }, apply = true })
+		end
+	})
 end
+
 
 return {
 	on_attach = on_attach
