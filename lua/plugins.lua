@@ -159,6 +159,7 @@ require('lazy').setup({
         theme = 'auto',
         component_separators = { left = '', right = '' },
         section_separators = { left = '', right = '' },
+        globalstatus = true,
       },
     },
   },
@@ -182,9 +183,17 @@ require('lazy').setup({
     -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     branch = '0.1.x',
-    dependencies = { 'nvim-lua/plenary.nvim' },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope-ui-select.nvim'
+    },
     config = function()
       require('telescope').setup {
+        extensions = {
+          ["ui-select"] = {
+            require("telescope.themes").get_dropdown {},
+          },
+        },
         defaults = {
           mappings = {
             i = {
@@ -194,6 +203,7 @@ require('lazy').setup({
           },
         },
       }
+    require('telescope').load_extension('ui-select')
     end,
   },
 
