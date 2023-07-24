@@ -185,13 +185,21 @@ require('lazy').setup({
     branch = '0.1.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope-ui-select.nvim'
+      'nvim-telescope/telescope-ui-select.nvim',
+      'nvim-telescope/telescope-fzf-native.nvim',
     },
+    build = 'make',
     config = function()
       require('telescope').setup {
         extensions = {
           ["ui-select"] = {
             require("telescope.themes").get_dropdown {},
+          },
+          fzf = {
+            fuzzy = true,
+            override_generic_sorter = true,
+            override_file_sorter = true,
+            case_mode = "smart_case",
           },
         },
         defaults = {
@@ -203,26 +211,9 @@ require('lazy').setup({
           },
         },
       }
-    require('telescope').load_extension('ui-select')
+      require('telescope').load_extension('ui-select')
+      require('telescope').load_extension('fzf')
     end,
-  },
-
-  {
-    -- Fuzzy Finder Algorithm which requires local dependencies to be built.
-    -- Only load if `make` is available. Make sure you have the system
-    -- requirements installed.
-    'nvim-telescope/telescope-fzf-native.nvim',
-    -- NOTE: If you are having trouble with this installation,
-    --       refer to the README for telescope-fzf-native for more instructions.
-    build = 'make',
-    cond = function()
-      return vim.fn.executable 'make' == 1
-    end,
-    post = function()
-      -- Enable telescope fzf native, if installed
-      pcall(require('telescope').load_extension, 'fzf')
-    end,
-
   },
 
   {
@@ -328,7 +319,7 @@ require('lazy').setup({
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   -- clangd = {},
-  -- gopls = {},
+  gopls = {},
   -- pyright = {},
   -- rust_analyzer = {},
   -- tsserver = {},
