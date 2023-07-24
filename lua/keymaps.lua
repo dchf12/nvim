@@ -3,14 +3,16 @@
 -- Keymaps for better default experience
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
+vim.keymap.set('n', '<C-n>', ':bnext<Return>', { noremap = true, silent = true })
+vim.keymap.set('n', '<C-p>', ':bprevious<Return>', { noremap = true, silent = true })
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
--- vim.keymap.set('n', '/', '/\v', { expr = true, silent = true })
+vim.keymap.set('n', '/', '/\\v', { noremap = true })
 vim.keymap.set({ 'n', 'i' }, '<C-s>', '<ESC>:w<CR>', { noremap = true })
 vim.keymap.set({ 'n', 'i' }, '<C-s><C-s>', '<ESC>ZZ', { noremap = true })
-vim.keymap.set({ 'n', 'i' }, '<C-q>', '<ESC>:q!<CR>', { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i' }, '<C-q><C-q>', '<ESC>:q!<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<ESC><ESC>', ':nohl<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-b><C-d>', ':bd<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-b><C-n>', ':bn<CR>', { noremap = true, silent = true })
