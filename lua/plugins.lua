@@ -207,7 +207,7 @@ require('lazy').setup({
             'filename',
             file_status = true,
             newfile_status = true,
-            path = 4,
+            path = 3,
           }
         },
         lualine_x = {
