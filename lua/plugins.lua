@@ -127,10 +127,10 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk,
-          { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
-        vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
-        vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
+        vim.keymap.set('n', '<leader>ph', require('gitsigns').prev_hunk,
+          { buffer = bufnr, desc = '[P]revious [H]unk' })
+        vim.keymap.set('n', '<leader>nh', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[N]ext [H]unk' })
+        vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[H]unk [P]review' })
       end,
     },
   },
@@ -141,11 +141,12 @@ require('lazy').setup({
     priority = 1000,
     config = function()
       require('onedark').setup({
+        style = 'darker',
         colors = {
-          comment = '#000000'
+          comments = '#FF00FF'
         },
       })
-      vim.cmd.colorscheme 'onedark'
+      require('onedark').load()
     end,
   },
 
@@ -161,25 +162,104 @@ require('lazy').setup({
         section_separators = { left = '', right = '' },
         globalstatus = true,
       },
+      sections = {
+        lualine_a = {
+          {
+            'mode',
+            draw_empty = true,
+          }
+        },
+        lualine_b = {
+          'branch',
+          {
+            'diff',
+            colored = true,
+            symbols = {
+              added = '+',
+              modified = '~',
+              removed = '-',
+            },
+            source = nil,
+          },
+          {
+            'diagnostics',
+            sources = { 'nvim_lsp' },
+            sections = { 'error', 'warn', 'info', 'hint' },
+            diagnostics_color = {
+              color_error = 'DiagnosticError',
+              color_warn = 'DiagnosticWarn',
+              color_info = 'DiagnosticInfo',
+              color_hint = 'DiagnosticHint',
+            },
+            symbols = {
+              error = ' ',
+              warn = ' ',
+              info = ' ',
+              hint = ' ',
+            },
+            colored = true,
+            update_in_insert = false,
+            always_visible = false,
+          }
+        },
+        lualine_c = {
+          {
+            'filename',
+            file_status = true,
+            newfile_status = true,
+            path = 4,
+          }
+        },
+        lualine_x = {
+          'encoding',
+          {
+            'fileformat',
+            symbols = {
+              dos = '',
+              unix = '',
+              mac = '',
+            },
+          },
+          {
+            'filetype',
+            colored = true,
+            icon_only = false,
+          },
+        },
+        lualine_y = { 'progress', 'filesize' },
+        lualine_z = { 'location' }
+      },
       tabline = {
         lualine_a = { 'buffers' },
-        lualine_b = {},
-        lualine_c = {},
+        lualine_b = { 'branch' },
+        lualine_c = {
+          {
+            'filename',
+            file_status = true,
+            newfile_status = true,
+            path = 4,
+          }
+        },
         lualine_x = {},
         lualine_y = {},
         lualine_z = { 'tabs' },
       },
-    },
-  },
-
-  {
-    -- Add indentation guides even on blank lines
-    'lukas-reineke/indent-blankline.nvim',
-    -- Enable `lukas-reineke/indent-blankline.nvim`
-    -- See `:help indent_blankline.txt`
-    opts = {
-      char = '┊',
-      show_trailing_blankline_indent = false,
+      winbar = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = {},
+        lualine_x = {},
+        lualine_y = {},
+        lualine_z = {}
+      },
+      inactive_winbar = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = {},
+        lualine_x = {},
+        lualine_y = {},
+        lualine_z = {}
+      },
     },
   },
 
