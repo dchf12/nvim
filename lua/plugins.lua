@@ -328,7 +328,7 @@ require('lazy').setup({
       require('nvim-treesitter.configs').setup {
         -- Add languages to be installed here that you want installed for treesitter
         ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'php', 'rust', 'javascript', 'tsx', 'typescript',
-          'vimdoc', 'vim' },
+          'vimdoc', 'vim', 'json', 'jq', 'jsonc', 'lua', 'yaml', 'toml', 'html', 'bash', 'dockerfile' },
 
         -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
         auto_install = true,
@@ -418,11 +418,13 @@ require('lazy').setup({
 --  Add any additional override configuration in the following tables. They will be passed to
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
-  -- clangd = {},
+  biome = {},
+  dockerls = {},
   gopls = {},
-  -- pyright = {},
-  -- rust_analyzer = {},
-  -- tsserver = {},
+  golangci_lint_ls = {},
+  intelephense = {},
+  jqls = {},
+  yamlls = {},
 
   lua_ls = {
     Lua = {
