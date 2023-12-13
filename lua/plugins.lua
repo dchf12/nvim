@@ -423,6 +423,7 @@ local servers = {
   gopls = {},
   golangci_lint_ls = {},
   intelephense = {},
+  jsonls = {},
   jqls = {},
   yamlls = {},
 
