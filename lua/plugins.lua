@@ -127,10 +127,9 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>ph', require('gitsigns').prev_hunk,
-          { buffer = bufnr, desc = '[P]revious [H]unk' })
-        vim.keymap.set('n', '<leader>nh', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[N]ext [H]unk' })
-        vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[H]unk [P]review' })
+        vim.keymap.set('n', '<leader>hn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[H]unk [N]ext' })
+        vim.keymap.set('n', '<leader>hp', require('gitsigns').prev_hunk, { buffer = bufnr, desc = '[H]unk [P]revious' })
+        vim.keymap.set('n', '<leader>hv', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[H]unk Pre[v]iew' })
       end,
     },
   },
@@ -183,6 +182,7 @@ require('lazy').setup({
           },
           {
             'diagnostics',
+            globals = { 'vim' },
             sources = { 'nvim_lsp' },
             sections = { 'error', 'warn', 'info', 'hint' },
             diagnostics_color = {
@@ -319,6 +319,7 @@ require('lazy').setup({
   {
     -- [[ Configure Treesitter ]]
     -- Highlight, edit, and navigate code
+    -- https://github.com/nvim-treesitter/nvim-treesitter
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
@@ -338,10 +339,10 @@ require('lazy').setup({
         incremental_selection = {
           enable = true,
           keymaps = {
-            init_selection = '<c-space>',
-            node_incremental = '<c-space>',
-            scope_incremental = '<c-s>',
-            node_decremental = '<M-space>',
+            init_selection = 'gnn',
+            node_incremental = 'grn',
+            scope_incremental = 'grc',
+            node_decremental = 'grm',
           },
         },
         textobjects = {
