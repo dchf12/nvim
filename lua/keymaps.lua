@@ -22,6 +22,7 @@ vim.keymap.set('n', 'tt', '<cmd>belowright new<CR><cmd>terminal<CR>', { noremap 
 vim.keymap.set('n', 'x', '"_x', { noremap = true, silent = true })
 vim.keymap.set('x', 'x', '"_x', { noremap = true, silent = true })
 vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>*', '*``cgn', { noremap = true })
 vim.api.nvim_create_autocmd('TermOpen', {
 	pattern = '*',
 	command = 'startinsert',
