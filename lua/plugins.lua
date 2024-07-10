@@ -287,6 +287,7 @@ require('lazy').setup({
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-ui-select.nvim',
       'nvim-telescope/telescope-fzf-native.nvim',
+      'nvim-telescope/telescope-dap.nvim',
     },
     build = 'make',
     config = function()
@@ -313,6 +314,7 @@ require('lazy').setup({
       }
       require('telescope').load_extension('ui-select')
       require('telescope').load_extension('fzf')
+      require('telescope').load_extension('dap')
     end,
   },
 
@@ -396,6 +398,102 @@ require('lazy').setup({
   {
     "github/copilot.vim",
     lazy = false,
+  },
+
+  {
+    "mfussenegger/nvim-dap",
+    dependencies = {
+      "theHamsta/nvim-dap-virtual-text",
+    },
+    config = function()
+      local dap_virtual_text = require("nvim-dap-virtual-text")
+      dap_virtual_text.setup()
+    end,
+  },
+
+  {
+    "rcarriga/nvim-dap-ui",
+    dependencies = { "nvim-neotest/nvim-nio" },
+    opts = {
+      icons = { expanded = "▾", collapsed = "▸" },
+      mappings = {
+        expand = { "<CR>", "<2-LeftMouse>" },
+        open = "o",
+        remove = "d",
+        edit = "e",
+        repl = "r",
+      },
+      expand_lines = vim.fn.has("nvim-0.7") == 1,
+      layouts = {
+        {
+          elements = {
+            { id = "scopes", size = 0.25 },
+            "breakpoints",
+            "stacks",
+            "watches",
+          },
+          size = 40,
+          position = "left",
+        },
+        {
+          elements = {
+            "repl",
+            "console",
+          },
+          size = 0.25,
+          position = "bottom",
+        },
+      },
+      controls = {
+        enabled = true,
+        element = "repl",
+        icons = {
+          pause = "",
+          play = "",
+          step_into = "",
+          step_over = "",
+          step_out = "",
+          step_back = "",
+          run_last = "↻",
+          terminate = "□",
+        },
+      },
+      floating = {
+        max_height = nil,
+        max_width = nil,
+        border = "single",
+        mappings = {
+          close = { "q", "<Esc>" },
+        },
+      },
+      windows = { indent = 1 },
+      render = {
+        max_type_length = nil,
+        max_value_lines = 100,
+      }
+    },
+    config = function(_, opts)
+      local dapui = require('dapui')
+      dapui.setup(opts)
+
+      local dap = require('dap')
+      dap.listeners.after.event_initialized["dapui_config"] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated["dapui_config"] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited["dapui_config"] = function()
+        dapui.close()
+      end
+    end,
+  },
+
+  {
+    "leoluz/nvim-dap-go",
+    config = function()
+      require('dap-go').setup()
+    end,
   },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart

@@ -51,6 +51,19 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
+-- dap
+vim.keymap.set('n', '<F5>', ':DapContinue<CR>', { silent = true })
+vim.keymap.set('n', '<F10>', ':DapStepOver<CR>', { silent = true })
+vim.keymap.set('n', '<F11>', ':DapStepInto<CR>', { silent = true })
+vim.keymap.set('n', '<F12>', ':DapStepOut<CR>', { silent = true })
+vim.keymap.set('n', '<leader>b', ':DapToggleBreakpoint<CR>', { silent = true })
+vim.keymap.set('n', '<leader>B',
+	':lua require("dap").set_breakpoint(nil, nil, vim.fn.input("Breakpoint condition: "))<CR>', { silent = true })
+vim.keymap.set('n', '<leader>lp', ':lua require("dap").set_breakpoint(nil, nil, vim.fn.input("Log point message: "))<CR>',
+	{ silent = true })
+vim.keymap.set('n', '<leader>dr', ':lua require("dap").repl.open()<CR>', { silent = true })
+vim.keymap.set('n', '<leader>dl', ':lua require("dap").run_last()<CR>', { silent = true })
+
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
@@ -84,14 +97,16 @@ local on_attach = function(_, bufnr)
 	end, '[W]orkspace [L]ist Folders')
 
 	nmap('<leader>f', vim.lsp.buf.format, '[F]ormat current buffer')
-	-- Create a command `:Format` local to the LSP buffer
-	-- vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-	-- 	vim.lsp.buf.format()
-	-- end, { desc = 'Format current buffer with LSP' })
 	vim.api.nvim_create_autocmd('BufWritePre', {
 		pattern = '*.go',
 		callback = function()
-			vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports' } }, apply = true })
+			vim.lsp.buf.code_action({
+				context = {
+					only = { 'source.organizeImports' },
+					diagnostics = {}
+				},
+				apply = true
+			})
 		end
 	})
 end

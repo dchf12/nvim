@@ -39,7 +39,7 @@ vim.api.nvim_create_autocmd('VimEnter', {
   callback = function()
     local file_dir = vim.fn.expand('%:p:h')
     if file_dir ~= '' then
-      vim.cmd('silent grep! TODO ' .. file_dir .. '/**/*')
+      vim.cmd('silent grep! //TODO ' .. file_dir .. '/**/*')
       local qf_list = vim.fn.getqflist()
       if #qf_list > 0 then
         vim.cmd('cwindow')
