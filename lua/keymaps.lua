@@ -52,17 +52,24 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open float
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- dap
-vim.keymap.set('n', '<F5>', ':DapContinue<CR>', { silent = true })
-vim.keymap.set('n', '<F10>', ':DapStepOver<CR>', { silent = true })
-vim.keymap.set('n', '<F11>', ':DapStepInto<CR>', { silent = true })
-vim.keymap.set('n', '<F12>', ':DapStepOut<CR>', { silent = true })
-vim.keymap.set('n', '<leader>b', ':DapToggleBreakpoint<CR>', { silent = true })
-vim.keymap.set('n', '<leader>B',
-	':lua require("dap").set_breakpoint(nil, nil, vim.fn.input("Breakpoint condition: "))<CR>', { silent = true })
-vim.keymap.set('n', '<leader>lp', ':lua require("dap").set_breakpoint(nil, nil, vim.fn.input("Log point message: "))<CR>',
-	{ silent = true })
-vim.keymap.set('n', '<leader>dr', ':lua require("dap").repl.open()<CR>', { silent = true })
-vim.keymap.set('n', '<leader>dl', ':lua require("dap").run_last()<CR>', { silent = true })
+vim.keymap.set('n', '<F4>', require('dap').terminate, { desc = 'Terminate DAP session', silent = true })
+vim.keymap.set('n', '<F5>', require('dap').continue, { desc = 'Start/Continue DAP session', silent = true })
+vim.keymap.set('n', '<F10>', require('dap').step_over, { desc = 'Step Over', silent = true })
+vim.keymap.set('n', '<F11>', require('dap').step_into, { desc = 'Step Into', silent = true })
+vim.keymap.set('n', '<F12>', require('dap').step_out, { desc = 'Step Out', silent = true })
+vim.keymap.set('n', '<leader>b', require('dap').toggle_breakpoint, { desc = 'Toggle Breakpoint', silent = true })
+vim.keymap.set('n', '<leader>B', function()
+	require('dap').set_breakpoint(nil, nil, vim.fn.input('Breakpoint condition: '))
+end, { desc = 'Set Breakpoint with condition', silent = true })
+vim.keymap.set('n', '<leader>lp', function()
+	require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))
+end, { desc = 'Set Log Point', silent = true })
+vim.keymap.set('n', '<leader>dr', function()
+	require('dap').repl.open()
+end, { desc = 'Open REPL', silent = true })
+vim.keymap.set('n', '<leader>dl', function()
+	require('dap').run_last()
+end, { desc = 'Run Last', silent = true })
 
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
