@@ -20,6 +20,18 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 vim.api.nvim_create_autocmd('TermOpen', {
   pattern = '*',
+  callback = function()
+    vim.api.nvim_buf_set_keymap(0, 't', '<C-p>', '<Up>', { noremap = true, silent = true })
+  end
+})
+vim.api.nvim_create_autocmd('TermOpen', {
+  pattern = '*',
+  callback = function()
+    vim.api.nvim_buf_set_keymap(0, 't', '<C-n>', '<Down>', { noremap = true, silent = true })
+  end
+})
+vim.api.nvim_create_autocmd('TermOpen', {
+  pattern = '*',
   command = 'startinsert',
 })
 vim.api.nvim_create_autocmd('TermOpen', {

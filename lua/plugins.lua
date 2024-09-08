@@ -23,28 +23,45 @@ require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
 
   -- Git related plugins
-  'tpope/vim-fugitive',
-  'tpope/vim-rhubarb',
+  {
+    'tpope/vim-fugitive',
+    lazy = true,
+    event = 'BufRead',
+    cmd = { 'Git', 'Gdiff', 'Gdiffsplit', 'Gvdiffsplit', 'Gwrite', 'Gw', 'Gstatus', 'Gblame' },
+  },
+  {
+    'tpope/vim-rhubarb',
+    lazy = true,
+    event = 'BufRead',
+    cmd = { 'GBrowse', 'Gbrowse' },
+  },
+
 
   -- Detect tabstop and shiftwidth automatically
-  'tpope/vim-sleuth',
+  {
+    'tpope/vim-sleuth',
+    lazy = true,
+    event = 'BufRead',
+  },
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
   {
     -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
+    lazy = true,
+    event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
-      { 'williamboman/mason.nvim', config = true },
-      'williamboman/mason-lspconfig.nvim',
+      { 'williamboman/mason.nvim',           lazy = true, config = true },
+      { 'williamboman/mason-lspconfig.nvim', lazy = true },
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       tag = 'legacy', opts = {} },
+      { 'j-hui/fidget.nvim',                 lazy = true, tag = 'legacy', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
-      'folke/neodev.nvim',
+      { 'folke/neodev.nvim',                 lazy = true, config = true },
     },
   },
 
@@ -52,6 +69,8 @@ require('lazy').setup({
     -- [[ Configure nvim-cmp ]]
     -- Autocompletion
     'hrsh7th/nvim-cmp',
+    lazy = true,
+    event = 'InsertEnter',
     dependencies = {
       -- Snippet Engine & its associated nvim-cmp source
       'L3MON4D3/LuaSnip',
@@ -61,7 +80,6 @@ require('lazy').setup({
       -- Adds a number of user-friendly snippets
       'rafamadriz/friendly-snippets',
     },
-    lazy = true,
     config = function()
       -- See `:help cmp`
       local cmp = require 'cmp'
@@ -113,10 +131,12 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
+  { 'folke/which-key.nvim', opts = {} },
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
+    lazy = true,
+    event = { 'BufReadPre', 'BufNewFile' },
     opts = {
       -- See `:help gitsigns.txt`
       signs = {
@@ -152,6 +172,8 @@ require('lazy').setup({
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
+    lazy = true,
+    event = 'BufRead',
     -- See `:help lualine.txt`
     opts = {
       options = {
@@ -266,6 +288,8 @@ require('lazy').setup({
   {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
+    lazy = true,
+    event = { 'BufReadPre', 'BufNewFile' },
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
     tag = 'v2.20.0',
@@ -276,7 +300,11 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  {
+    'numToStr/Comment.nvim',
+    lazy = true,
+    keys = { 'gc', 'gcc', 'gC', 'gbc' },
+  },
 
   {
     -- [[ Configure Telescope ]]
@@ -323,6 +351,8 @@ require('lazy').setup({
     -- Highlight, edit, and navigate code
     -- https://github.com/nvim-treesitter/nvim-treesitter
     'nvim-treesitter/nvim-treesitter',
+    lazy = true,
+    event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
@@ -402,6 +432,8 @@ require('lazy').setup({
 
   {
     "mfussenegger/nvim-dap",
+    lazy = true,
+    cmd = { "DapToggleBreakpoint", "DapContinue", "DapStepOver", "DapStepInto", "DapStepOut", "DapToggleRepl" },
     dependencies = {
       "theHamsta/nvim-dap-virtual-text",
     },
@@ -413,6 +445,7 @@ require('lazy').setup({
 
   {
     "rcarriga/nvim-dap-ui",
+    lazy = true,
     dependencies = { "nvim-neotest/nvim-nio" },
     opts = {
       icons = { expanded = "▾", collapsed = "▸" },
@@ -491,6 +524,8 @@ require('lazy').setup({
 
   {
     "leoluz/nvim-dap-go",
+    lazy = true,
+    ft = 'go',
     config = function()
       require('dap-go').setup()
     end,
