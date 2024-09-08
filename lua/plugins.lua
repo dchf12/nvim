@@ -304,6 +304,7 @@ require('lazy').setup({
     'numToStr/Comment.nvim',
     lazy = true,
     keys = { 'gc', 'gcc', 'gC', 'gbc' },
+    opts = {},
   },
 
   {
