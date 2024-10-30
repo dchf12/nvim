@@ -155,17 +155,11 @@ require('lazy').setup({
   },
 
   {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
-    priority = 1000,
+    -- Theme
+    'rebelot/kanagawa.nvim',
     config = function()
-      require('onedark').setup({
-        style = 'darker',
-        colors = {
-          comments = '#FF00FF'
-        },
-      })
-      require('onedark').load()
+      require('kanagawa').setup({});
+      require("kanagawa").load("wave")
     end,
   },
 
