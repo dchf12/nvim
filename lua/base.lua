@@ -47,18 +47,18 @@ vim.api.nvim_create_autocmd('QuickFixCmdPost', {
   command = 'cwindow',
   nested = true,
 })
-vim.api.nvim_create_autocmd('VimEnter', {
-  callback = function()
-    local file_dir = vim.fn.expand('%:p:h')
-    if file_dir ~= '' then
-      vim.cmd('silent grep! //TODO ' .. file_dir .. '/**/*')
-      local qf_list = vim.fn.getqflist()
-      if #qf_list > 0 then
-        vim.cmd('cwindow')
-      end
-    end
-  end
-})
+-- vim.api.nvim_create_autocmd('VimEnter', {
+--   callback = function()
+--     local file_dir = vim.fn.expand('%:p:h')
+--     if file_dir ~= '' then
+--       vim.cmd('silent grep! //TODO ' .. file_dir .. '/**/*')
+--       local qf_list = vim.fn.getqflist()
+--       if #qf_list > 0 then
+--         vim.cmd('cwindow')
+--       end
+--     end
+--   end
+-- })
 
 -- Goファイルの場合、makeprgを'task'に設定
 vim.api.nvim_create_autocmd("FileType", {
