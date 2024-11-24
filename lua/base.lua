@@ -59,3 +59,22 @@ vim.api.nvim_create_autocmd('VimEnter', {
     end
   end
 })
+
+-- Goファイルの場合、makeprgを'task'に設定
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "go",
+  callback = function()
+    vim.opt_local.makeprg = "task"
+  end,
+})
+
+-- それ以外のファイルの場合、makeprgを'make'に設定
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "*",
+  callback = function()
+    if vim.bo.filetype ~= "go" then
+      vim.opt_local.makeprg = "make"
+    end
+  end,
+})
+
