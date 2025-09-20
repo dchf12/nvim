@@ -558,10 +558,17 @@ local servers = {
 
   lua_ls = {
     Lua = {
-      workspace = { checkThirdParty = false },
+      diagnostics = {
+        globals = { 'vim' },
+      },
+      runtime = {
+        version = 'LuaJIT',
+      },
+      workspace = {
+        library = vim.api.nvim_get_runtime_file('', true),
+        checkThirdParty = false,
+      },
       telemetry = { enable = false },
-      indentation = { indentWidth = 2 },
-      format = { convertTabs = true },
     },
   },
 }
@@ -573,19 +580,24 @@ require('neodev').setup()
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
--- Ensure the servers above are installed
 local mason_lspconfig = require 'mason-lspconfig'
 
 mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers),
-}
+  handlers = {
+    function(server_name)
+      local opts = {
+        capabilities = capabilities,
+        on_attach = require('keymaps').on_attach,
+        settings = servers[server_name],
+      }
 
-mason_lspconfig.setup_handlers {
-  function(server_name)
-    require('lspconfig')[server_name].setup {
-      capabilities = capabilities,
-      on_attach = require('keymaps').on_attach,
-      settings = servers[server_name],
-    }
-  end,
+      if server_name == "lua_ls" then
+        opts.root_dir = require("lspconfig.util").root_pattern(".git")(vim.fn.getcwd())
+          or vim.fn.getcwd()
+      end
+
+      require('lspconfig')[server_name].setup(opts)
+    end,
+  },
 }
