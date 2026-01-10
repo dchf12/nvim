@@ -19,27 +19,27 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 vim.api.nvim_create_autocmd('TermOpen', {
-  pattern = '*',
+  pattern = 'term://*',
   callback = function()
     vim.api.nvim_buf_set_keymap(0, 't', '<C-p>', '<Up>', { noremap = true, silent = true })
   end
 })
 vim.api.nvim_create_autocmd('TermOpen', {
-  pattern = '*',
+  pattern = 'term://*',
   callback = function()
     vim.api.nvim_buf_set_keymap(0, 't', '<C-n>', '<Down>', { noremap = true, silent = true })
   end
 })
 vim.api.nvim_create_autocmd('TermOpen', {
-  pattern = '*',
+  pattern = 'term://*',
   command = 'startinsert',
 })
 vim.api.nvim_create_autocmd('TermOpen', {
-  pattern = '*',
+  pattern = 'term://*',
   command = 'setlocal norelativenumber',
 })
 vim.api.nvim_create_autocmd('TermOpen', {
-  pattern = '*',
+  pattern = 'term://*',
   command = 'setlocal nonumber',
 })
 vim.api.nvim_create_autocmd('QuickFixCmdPost', {
@@ -78,3 +78,18 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- カーソルを止めてから表示されるまでの時間（ミリ秒）
+vim.opt.updatetime = 300
+
+vim.api.nvim_create_autocmd("CursorHold", {
+  callback = function()
+    vim.diagnostic.open_float(nil, {
+      focusable = false,
+      close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+      border = 'rounded',
+      source = 'always',
+      prefix = ' ',
+      scope = 'line',
+    })
+  end,
+})

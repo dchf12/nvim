@@ -2,7 +2,7 @@
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim.fn.system {
     'git',
     'clone',
@@ -36,6 +36,31 @@ require('lazy').setup({
     cmd = { 'GBrowse', 'Gbrowse' },
   },
 
+  {
+    "folke/lazydev.nvim",
+    ft = "lua",
+    opts = {
+      library = {
+        { path = "luvit-meta/library", words = { "vim%.uv" } },
+      },
+    },
+  },
+
+  {
+    "akinsho/toggleterm.nvim",
+    version = "*",
+    lazy = true,
+    cmd = { "ToggleTerm" },
+    config = function()
+      require("toggleterm").setup{
+        size = 20,
+        direction = 'float',
+        float_opts = {
+          border = 'curved',
+        },
+      }
+    end,
+  },
 
   -- Detect tabstop and shiftwidth automatically
   {
@@ -60,8 +85,6 @@ require('lazy').setup({
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { 'j-hui/fidget.nvim',                 lazy = true, tag = 'legacy', opts = {} },
 
-      -- Additional lua configuration, makes nvim stuff amazing!
-      { 'folke/neodev.nvim',                 lazy = true, config = true },
     },
   },
 
@@ -147,8 +170,16 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>hn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[H]unk [N]ext' })
-        vim.keymap.set('n', '<leader>hp', require('gitsigns').prev_hunk, { buffer = bufnr, desc = '[H]unk [P]revious' })
+        vim.keymap.set('n', '<leader>hn', function()
+          if vim.wo.diff then return ']c' end
+          vim.schedule(function() require('gitsigns').nav_hunk('next') end)
+          return '<Ignore>'
+        end, { expr = true, buffer = bufnr, desc = 'Jump to next hunk' })
+        vim.keymap.set('n', '<leader>hp', function()
+          if vim.wo.diff then return '[c' end
+          vim.schedule(function() require('gitsigns').nav_hunk('prev') end)
+          return '<Ignore>'
+        end, { expr = true, buffer = bufnr, desc = 'Jump to previous hunk' })
         vim.keymap.set('n', '<leader>hv', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[H]unk Pre[v]iew' })
       end,
     },
@@ -310,7 +341,6 @@ require('lazy').setup({
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-ui-select.nvim',
       'nvim-telescope/telescope-fzf-native.nvim',
-      'nvim-telescope/telescope-dap.nvim',
     },
     build = 'make',
     config = function()
@@ -337,7 +367,6 @@ require('lazy').setup({
       }
       require('telescope').load_extension('ui-select')
       require('telescope').load_extension('fzf')
-      require('telescope').load_extension('dap')
     end,
   },
 
@@ -356,10 +385,14 @@ require('lazy').setup({
       require('nvim-treesitter.configs').setup {
         -- Add languages to be installed here that you want installed for treesitter
         ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'php', 'rust', 'javascript', 'tsx', 'typescript',
-          'vimdoc', 'vim', 'json', 'jq', 'jsonc', 'lua', 'yaml', 'toml', 'html', 'bash', 'dockerfile' },
+          'vimdoc', 'vim', 'json', 'jq', 'jsonc', 'yaml', 'toml', 'html', 'bash', 'dockerfile' },
 
         -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
         auto_install = true,
+
+        ignore_install = {},
+        sync_install = false,
+        modules = {},
 
         highlight = { enable = true },
         indent = { enable = true },
@@ -425,107 +458,6 @@ require('lazy').setup({
     lazy = false,
   },
 
-  {
-    "mfussenegger/nvim-dap",
-    lazy = true,
-    cmd = { "DapToggleBreakpoint", "DapContinue", "DapStepOver", "DapStepInto", "DapStepOut", "DapToggleRepl" },
-    dependencies = {
-      "theHamsta/nvim-dap-virtual-text",
-    },
-    config = function()
-      local dap_virtual_text = require("nvim-dap-virtual-text")
-      dap_virtual_text.setup()
-    end,
-  },
-
-  {
-    "rcarriga/nvim-dap-ui",
-    lazy = true,
-    dependencies = { "nvim-neotest/nvim-nio" },
-    opts = {
-      icons = { expanded = "▾", collapsed = "▸" },
-      mappings = {
-        expand = { "<CR>", "<2-LeftMouse>" },
-        open = "o",
-        remove = "d",
-        edit = "e",
-        repl = "r",
-      },
-      expand_lines = vim.fn.has("nvim-0.7") == 1,
-      layouts = {
-        {
-          elements = {
-            { id = "scopes", size = 0.25 },
-            "breakpoints",
-            "stacks",
-            "watches",
-          },
-          size = 40,
-          position = "left",
-        },
-        {
-          elements = {
-            "repl",
-            "console",
-          },
-          size = 0.25,
-          position = "bottom",
-        },
-      },
-      controls = {
-        enabled = true,
-        element = "repl",
-        icons = {
-          pause = "",
-          play = "",
-          step_into = "",
-          step_over = "",
-          step_out = "",
-          step_back = "",
-          run_last = "↻",
-          terminate = "□",
-        },
-      },
-      floating = {
-        max_height = nil,
-        max_width = nil,
-        border = "single",
-        mappings = {
-          close = { "q", "<Esc>" },
-        },
-      },
-      windows = { indent = 1 },
-      render = {
-        max_type_length = nil,
-        max_value_lines = 100,
-      }
-    },
-    config = function(_, opts)
-      local dapui = require('dapui')
-      dapui.setup(opts)
-
-      local dap = require('dap')
-      dap.listeners.after.event_initialized["dapui_config"] = function()
-        dapui.open()
-      end
-      dap.listeners.before.event_terminated["dapui_config"] = function()
-        dapui.close()
-      end
-      dap.listeners.before.event_exited["dapui_config"] = function()
-        dapui.close()
-      end
-    end,
-  },
-
-  {
-    "leoluz/nvim-dap-go",
-    lazy = true,
-    ft = 'go',
-    config = function()
-      require('dap-go').setup()
-    end,
-  },
-
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
@@ -572,9 +504,6 @@ local servers = {
     },
   },
 }
-
--- Setup neovim lua configuration
-require('neodev').setup()
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
